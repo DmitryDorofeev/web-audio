@@ -69,8 +69,8 @@ modules.define('player', ['i-bem__dom'], function (provide, DOM) {
 
                 this.findBlockInside('visualization').draw(this.analyzer, 650, 200);
 
-                console.log(this.source);
-
+                this.setMod('playing');
+                this.delMod('stopped');
                 this.source.start(0);
             }
         },
@@ -80,6 +80,9 @@ modules.define('player', ['i-bem__dom'], function (provide, DOM) {
                 this.source.stop(0);
                 this.source = null;
                 this.findBlockInside('visualization').clear();
+
+                this.setMod('stopped');
+                this.delMod('playing');
             }
         },
 
@@ -134,6 +137,7 @@ modules.define('player', ['i-bem__dom'], function (provide, DOM) {
         },
 
         _toggleEqualizer: function () {
+            this.toggleMod('equalizer');
             this.toggleMod(this.elem('equalizer'), 'hidden');
         },
 

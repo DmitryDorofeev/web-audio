@@ -39,7 +39,8 @@ module.exports = {
             }
         ],
         mods: {
-            loading: true
+            loading: true,
+            stopped: true
         }
     }
 };

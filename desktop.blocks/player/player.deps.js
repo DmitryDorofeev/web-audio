@@ -21,6 +21,9 @@
         { elem: 'dragtext' },
         { elem: 'preloader' },
         { mod: 'drag' },
+        { mod: 'playing' },
+        { mod: 'stopped' },
+        { mod: 'equalizer' },
         { mod: 'loading' }
     ]
 })
