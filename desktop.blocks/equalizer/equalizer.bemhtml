@@ -1,0 +1,19 @@
+block('equalizer')(
+    js()(true),
+    content()(function () {
+        return {
+            block : 'radio-group',
+            name : 'select',
+            val : 5,
+            mods: { type: 'button' },
+            text : 'Настройки эквалайзера',
+            options : [
+                { val : 1, text : 'pop' },
+                { val : 2, text : 'rock' },
+                { val : 3, text : 'jazz' },
+                { val : 4, text : 'classic' },
+                { val : 5, text : 'normal' }
+            ]
+        }
+    })
+);

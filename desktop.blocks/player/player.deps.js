@@ -4,6 +4,7 @@
         { block: 'ico' },
         { block: 'controls' },
         { block: 'visualization' },
+        { block: 'equalizer' },
         { block: 'preloader' }
     ],
     shouldDeps: [
@@ -17,6 +18,7 @@
         { elem: 'equalizer' },
         { elem: 'fileinput' },
         { elem: 'dragspace' },
+        { elem: 'dragtext' },
         { elem: 'preloader' },
         { mod: 'drag' },
         { mod: 'loading' }

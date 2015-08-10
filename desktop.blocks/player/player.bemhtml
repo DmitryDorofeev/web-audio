@@ -10,7 +10,10 @@ block('player')(
             },
             {
                 elem: 'equalizer',
-                mods: { hidden: true }
+                mods: { hidden: true },
+                content: {
+                    block: 'equalizer'
+                }
             },
             {
                 elem: 'fileinput'
@@ -44,7 +47,11 @@ block('player')(
                 ]
             },
             {
-                elem: 'dragspace'
+                elem: 'dragspace',
+                content: {
+                    elem: 'dragtext',
+                    content: 'Отпустите файл, чтобы открыть'
+                }
             },
             {
                 elem: 'preloader',

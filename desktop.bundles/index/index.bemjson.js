@@ -1,6 +1,6 @@
 module.exports = {
     block: 'page',
-    title: 'ba',
+    title: 'Web audio player',
     head: [
         {elem: 'meta', attrs: {name: 'description', content: ''}},
         {elem: 'meta', attrs: {name: 'viewport', content: 'width=device-width, initial-scale=1'}},
