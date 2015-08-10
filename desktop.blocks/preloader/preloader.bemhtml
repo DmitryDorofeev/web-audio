@@ -1,0 +1,28 @@
+block('preloader')(
+    content()(function () {
+        return {
+            elem: 'wrap',
+            content: [
+                {
+                    elem: 'item'
+                },
+                {
+                    elem: 'item',
+                    mods: { second: true }
+                },
+                {
+                    elem: 'item',
+                    mods: { third: true }
+                },
+                {
+                    elem: 'item',
+                    mods: { fourth: true }
+                },
+                {
+                    elem: 'item',
+                    mods: { fifth: true }
+                }
+            ]
+        }
+    })
+);

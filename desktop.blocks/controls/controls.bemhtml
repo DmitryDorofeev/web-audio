@@ -1,0 +1,14 @@
+block('controls')(
+    js()(true),
+    content()(function () {
+
+        this.ctx.content = this.ctx.content || [];
+
+        return this.ctx.content.map(function (control) {
+            return {
+                elem: 'item',
+                content: control
+            }
+        });
+    })
+);

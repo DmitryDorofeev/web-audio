@@ -1,0 +1,77 @@
+block('player')(
+    js()(true),
+    content()(function () {
+        return [
+            {
+                elem: 'visual',
+                content: {
+                    block: 'visualization'
+                }
+            },
+            {
+                elem: 'equalizer',
+                mods: { hidden: true }
+            },
+            {
+                elem: 'fileinput'
+            },
+            {
+                elem: 'toolbar',
+                content: [
+                    {
+                        elem: 'cover'
+                    },
+                    {
+                        elem: 'info',
+                        content: [
+                            {
+                                elem: 'title',
+                                content: 'Название композиции'
+                            },
+                            {
+                                elem: 'artist',
+                                content: 'Исполнитель'
+                            }
+                        ]
+                    },
+                    {
+                        elem: 'controls',
+                        content: {
+                            block: 'controls',
+                            content: this.ctx.controls || []
+                        }
+                    }
+                ]
+            },
+            {
+                elem: 'dragspace'
+            },
+            {
+                elem: 'preloader',
+                content: {
+                    block: 'preloader'
+                }
+            }
+        ]
+    }),
+    elem('cover')(
+        tag()('img'),
+        content()(function () {
+            return
+        }),
+        attrs()(function () {
+            return {
+                src: './placeholder.jpg',
+                alt: 'cover'
+            }
+        })
+    ),
+    elem('fileinput')(
+        tag()('input'),
+        attrs()(function () {
+            return {
+                type: 'file'
+            }
+        })
+    )
+);

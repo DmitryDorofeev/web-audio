@@ -1,0 +1,10 @@
+block('visualization')(
+    tag()('canvas'),
+    js()(true),
+    attrs()(function () {
+        return {
+            width: '500',
+            height: '200'
+        }
+    })
+);
