@@ -5,7 +5,8 @@
         { block: 'controls' },
         { block: 'visualization' },
         { block: 'equalizer' },
-        { block: 'preloader' }
+        { block: 'preloader' },
+        { block: 'message' }
     ],
     shouldDeps: [
         { elem: 'visual' },
@@ -14,12 +15,14 @@
         { elem: 'controls' },
         { elem: 'title' },
         { elem: 'artist' },
+        { elem: 'filename' },
         { elem: 'cover' },
         { elem: 'equalizer' },
         { elem: 'fileinput' },
         { elem: 'dragspace' },
         { elem: 'dragtext' },
         { elem: 'preloader' },
+        { elem: 'message' },
         { mod: 'drag' },
         { mod: 'playing' },
         { mod: 'stopped' },

@@ -34,6 +34,10 @@ block('player')(
                             {
                                 elem: 'artist',
                                 content: 'Исполнитель'
+                            },
+                            {
+                                elem: 'filename',
+                                content: 'Имя файла'
                             }
                         ]
                     },
@@ -45,6 +49,9 @@ block('player')(
                         }
                     }
                 ]
+            },
+            {
+                elem: 'message'
             },
             {
                 elem: 'dragspace',
@@ -64,12 +71,13 @@ block('player')(
     elem('cover')(
         tag()('img'),
         content()(function () {
-            return
+            return;
         }),
         attrs()(function () {
             return {
                 src: './placeholder.jpg',
-                alt: 'cover'
+                alt: 'cover',
+                draggable: false
             }
         })
     ),
@@ -78,6 +86,13 @@ block('player')(
         attrs()(function () {
             return {
                 type: 'file'
+            }
+        })
+    ),
+    elem('message')(
+        content()(function () {
+            return {
+                block: 'message'
             }
         })
     )

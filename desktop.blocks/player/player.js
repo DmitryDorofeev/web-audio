@@ -64,8 +64,8 @@ modules.define('player', ['i-bem__dom'], function (provide, DOM) {
                 this.source.loop = false;
 
                 this.analyzer = this.context.createAnalyser();
-                this.source.connect(this.analyzer);
-                this.source.connect(this.context.destination);
+
+                this.findBlockInside('equalizer').connect(this.context, this.source, this.analyzer);
 
                 this.findBlockInside('visualization').draw(this.analyzer, 650, 200);
 
@@ -86,7 +86,15 @@ modules.define('player', ['i-bem__dom'], function (provide, DOM) {
             }
         },
 
+        /**
+         * @param {File} file
+         */
         openFile: function (file) {
+
+            if (!(new Audio()).canPlayType(file.type)) {
+                this.findBlockInside('message').showError('Неподдерживаемый формат');
+            }
+
             var reader = new FileReader();
 
             this.context = new AudioContext();
@@ -94,13 +102,20 @@ modules.define('player', ['i-bem__dom'], function (provide, DOM) {
             this.setMod('loading');
 
             reader.onload = function (event) {
-                this.context.decodeAudioData(event.target.result, function (buffer) {
-                    this.buffer = buffer;
-                    this.delMod('loading');
-                }.bind(this));
+                this.context.decodeAudioData(event.target.result,
+                    function (buffer) {
+                        this.buffer = buffer;
+                        this.delMod('loading');
+                    }.bind(this),
+                    function () {
+                        this.delMod('loading');
+                        this.findBlockInside('message').showError('Не могу открыть файл');
+                    }.bind(this));
             }.bind(this);
 
-            var src = file.urn ||file.name;
+            this.elem('filename').text(file.name);
+
+            var src = file.urn || file.name;
 
             ID3.loadTags(src, function () {
 
@@ -130,7 +145,7 @@ modules.define('player', ['i-bem__dom'], function (provide, DOM) {
         },
 
         updateMetaInfo: function (meta) {
-            console.log(meta);
+
             this.elem('title').text(meta.title);
             this.elem('artist').text(meta.artist);
             this.elem('cover').prop('src', meta.cover || 'placeholder.jpg');
