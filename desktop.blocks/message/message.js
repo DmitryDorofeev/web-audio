@@ -13,6 +13,7 @@ modules.define('message', ['i-bem__dom'], function (provide, DOM) {
         showError: function (message) {
             this.elem('text').text(message);
             this.setMod('visible');
+
             setTimeout(function () {
                 this.delMod('visible');
             }.bind(this), 2000);

@@ -39,8 +39,10 @@ modules.define('equalizer', ['i-bem__dom'], function (provide, DOM) {
         },
 
         /**
+         * @desc connecting to equalizer
          * @param {AudioContext} context
          * @param source
+         * @param {AudioAnalyser} analyser
          * @public
          */
         connect: function (context, source, analyser) {

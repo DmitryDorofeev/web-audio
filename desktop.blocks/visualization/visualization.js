@@ -25,7 +25,13 @@ modules.define('visualization', ['i-bem__dom'], function (provide, DOM) {
             this.drawFrame();
         },
 
+        /**
+         * @desc display current data
+         */
         drawFrame: function () {
+            var barWidth,
+                barHeight,
+                x = 0;
 
             requestAnimationFrame(this.drawFrame.bind(this));
 
@@ -35,12 +41,10 @@ modules.define('visualization', ['i-bem__dom'], function (provide, DOM) {
             this.dataArray = new Uint8Array(this.bufferLength);
             this.analyzer.getByteFrequencyData(this.dataArray);
 
-            var barWidth = (this.width / this.bufferLength) * 2.5;
-            var barHeight;
-            var x = 0;
+            barWidth = (this.width / this.bufferLength) * 2.5;
+
             for (var i = 0; i < this.bufferLength; i++) {
                 barHeight = this.dataArray[i];
-
 
                 this.canvasCtx.fillStyle = 'rgb(' + (barHeight + 40) + ',152,219)';
                 this.canvasCtx.fillRect(x, this.height - barHeight / 2, barWidth, barHeight);
@@ -49,6 +53,9 @@ modules.define('visualization', ['i-bem__dom'], function (provide, DOM) {
             }
         },
 
+        /**
+         * @desc clear canvas
+         */
         clear: function () {
             this.canvasCtx.clearRect(0, 0, this.width, this.height);
         }

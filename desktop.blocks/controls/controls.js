@@ -15,6 +15,11 @@ modules.define('controls', ['i-bem__dom'], function (provide, DOM) {
             }
         },
 
+        /**
+         * @desc emits event with same type as button name
+         * @param event
+         * @private
+         */
         _onButtonClick: function (event) {
             var uniqueName = event.target.getName();
             this.emit(uniqueName);
