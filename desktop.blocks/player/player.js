@@ -14,6 +14,12 @@ modules.define('player', ['i-bem__dom'], function (provide, DOM) {
         onSetMod: {
             'js': {
                 'inited': function () {
+
+                    if (!window.AudioContext) {
+                        this.findBlockInside('message').showError('Не поддерживается Audio API');
+                        return;
+                    }
+
                     this.findBlockInside('controls')
                         .on('play', this._onPlay, this)
                         .on('stop', this._onStop, this)
