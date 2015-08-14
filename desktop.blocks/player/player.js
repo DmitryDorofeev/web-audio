@@ -69,7 +69,12 @@ modules.define('player', ['i-bem__dom'], function (provide, DOM) {
          */
         _onPlay: function () {
 
-            if (!this.source && this.buffer) {
+            if(this.source) {
+                this.findBlockInside('message').showError('Сначала остановите воспроизведение');
+                return;
+            }
+
+            if (this.buffer) {
 
                 this.source = this.context.createBufferSource();
                 this.source.buffer = this.buffer;
@@ -81,9 +86,12 @@ modules.define('player', ['i-bem__dom'], function (provide, DOM) {
 
                 this.findBlockInside('visualization').draw(this.analyzer, 650, 200);
 
+                this.source.start(0);
+
                 this.setMod('playing');
                 this.delMod('stopped');
-                this.source.start(0);
+            } else {
+                this.findBlockInside('message').showError('Файл не был загружен');
             }
         },
 
@@ -120,7 +128,7 @@ modules.define('player', ['i-bem__dom'], function (provide, DOM) {
 
             this.setMod('loading');
 
-            reader.addEventListener('load', this.decodeAudio.bind(this));
+            reader.onload = this.decodeAudio.bind(this);
             reader.readAsArrayBuffer(file);
 
             this.elem('filename').text(file.name);
@@ -130,18 +138,27 @@ modules.define('player', ['i-bem__dom'], function (provide, DOM) {
         /**
          * Decode audio data if possible
          */
-        decodeAudio: function () {
-            this.context.decodeAudioData(
-                event.target.result,
-                function (buffer) {
-                    this.buffer = buffer;
-                    this.delMod('loading');
-                }.bind(this),
-                function () {
-                    this.delMod('loading');
-                    this.findBlockInside('message').showError('Не могу открыть файл');
-                }.bind(this)
-            );
+        decodeAudio: function (event) {
+            this.context.decodeAudioData(event.target.result, this._onDecodeDone.bind(this), this._onDecodeFail.bind(this));
+        },
+
+        /**
+         * action if audio decoding done
+         * @param buffer
+         * @private
+         */
+        _onDecodeDone: function (buffer) {
+            this.buffer = buffer;
+            this.delMod('loading');
+        },
+
+        /**
+         * action if audio decoding fails
+         * @private
+         */
+        _onDecodeFail: function () {
+            this.delMod('loading');
+            this.findBlockInside('message').showError('Не могу открыть файл');
         },
 
         /**
