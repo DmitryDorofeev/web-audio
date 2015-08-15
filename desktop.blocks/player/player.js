@@ -1,5 +1,5 @@
 modules.define('player', ['i-bem__dom'], function (provide, DOM) {
-
+    'use strict';
     /**
      * @namespace
      * @name Player
@@ -33,12 +33,12 @@ modules.define('player', ['i-bem__dom'], function (provide, DOM) {
                     this.bindTo('dragenter', function (event) {
                         event.preventDefault();
                         this.setMod('drag');
-                        this.dragging++;
+                        this.dragging += 1;
                     });
 
                     this.bindTo('dragleave', function (event) {
                         event.preventDefault();
-                        this.dragging--;
+                        this.dragging -= 1;
 
                         if (this.dragging === 0) {
                             this.delMod('drag');
@@ -71,7 +71,7 @@ modules.define('player', ['i-bem__dom'], function (provide, DOM) {
          */
         _onPlay: function () {
 
-            if(this.source) {
+            if (this.source) {
                 this.findBlockInside('message').showError('Сначала остановите воспроизведение');
                 return;
             }
