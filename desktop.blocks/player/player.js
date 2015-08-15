@@ -15,7 +15,7 @@ modules.define('player', ['i-bem__dom'], function (provide, DOM) {
             'js': {
                 'inited': function () {
 
-                    if (!window.AudioContext) {
+                    if (!(window.AudioContext || window.webkitAudioContext)) {
                         this.findBlockInside('message').showError('Не поддерживается Audio API');
                         return;
                     }
@@ -126,7 +126,7 @@ modules.define('player', ['i-bem__dom'], function (provide, DOM) {
             }
 
             reader = new FileReader();
-            this.context = new AudioContext();
+            this.context = new (window.AudioContext || window.webkitAudioContext)();
 
             this.setMod('loading');
 
