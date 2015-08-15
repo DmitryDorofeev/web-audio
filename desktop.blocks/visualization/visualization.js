@@ -58,6 +58,9 @@ modules.define('visualization', ['i-bem__dom'], function (provide, DOM) {
             }
         },
 
+        /**
+         * Smoothing visualization
+         */
         attenuation: function () {
             var barHeight,
                 x = 0;

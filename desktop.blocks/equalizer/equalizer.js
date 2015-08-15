@@ -6,7 +6,6 @@ modules.define('equalizer', ['i-bem__dom'], function (provide, DOM) {
      */
     DOM.decl('equalizer', {
 
-        gainDb: -40.0,
         bandSplit: [60, 170, 310, 600, 1000, 3000, 6000, 12000, 14000, 16000],
 
         modes: {
@@ -46,6 +45,7 @@ modules.define('equalizer', ['i-bem__dom'], function (provide, DOM) {
          * @public
          */
         connect: function (context, source, analyser) {
+            var sum;
 
             this.filters = this.bandSplit.map(function (frequency) {
                 var filter = context.createBiquadFilter();
@@ -57,7 +57,7 @@ modules.define('equalizer', ['i-bem__dom'], function (provide, DOM) {
                 return filter;
             }.bind(this));
 
-            this.sum = context.createGain();
+            sum = context.createGain();
 
             var lastFilter = this.filters.reduce(function (prevFilter, filter) {
                 prevFilter.connect(filter);
@@ -66,15 +66,11 @@ modules.define('equalizer', ['i-bem__dom'], function (provide, DOM) {
 
             source.connect(this.filters[0]);
 
-            lastFilter.connect(this.sum);
+            lastFilter.connect(sum);
 
 
-            this.sum.connect(analyser);
-            this.sum.connect(context.destination);
-        },
-
-        mute: function () {
-            this.sum.gain.value = 0;
+            sum.connect(analyser);
+            sum.connect(context.destination);
         }
 
     });
