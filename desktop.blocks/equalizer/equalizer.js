@@ -7,14 +7,14 @@ modules.define('equalizer', ['i-bem__dom'], function (provide, DOM) {
     DOM.decl('equalizer', {
 
         gainDb: -40.0,
-        bandSplit: [32, 500, 16000],
+        bandSplit: [60, 170, 310, 600, 1000, 3000, 6000, 12000, 14000, 16000],
 
         modes: {
-            pop: [0.4, 0.8, 0.5],
-            rock: [0.8, 0.5, 0.8],
-            jazz: [0.7, 0.4, 0.7],
-            classic: [0.6, 0.4, 0.6],
-            normal: [0.5, 0.5, 0.5]
+            pop: [-1.125, 3, 4.5, 4.875, 3.375, -0.75, -1.5, -1.5, -1.125, -1.125],
+            rock: [4.875, 3, -3.375, -4.875, -2.25, 2.625, 5.625, 6.75, 6.75, 6.75],
+            jazz: [-1.5, -3, -2.625, -0.375, 2.625, 3.75, 5.625, 6, 6.75, 6],
+            classic: [0.375, 0.375, 0.375, 0.375, 0.375, 0.375, -4.5, -4.5, -4.5, -6],
+            normal: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         },
 
         onSetMod: {
@@ -33,9 +33,9 @@ modules.define('equalizer', ['i-bem__dom'], function (provide, DOM) {
         _onChange: function (event) {
             var value = event.target.getVal();
 
-            this.lGain.gain.value = this.modes[value][0];
-            this.mGain.gain.value = this.modes[value][1];
-            this.hGain.gain.value = this.modes[value][2];
+            this.filters.forEach(function (filter, index) {
+                filter.gain.value = this.modes[value][index];
+            }.bind(this));
         },
 
         /**
@@ -47,39 +47,34 @@ modules.define('equalizer', ['i-bem__dom'], function (provide, DOM) {
          */
         connect: function (context, source, analyser) {
 
-            var hBand = context.createBiquadFilter();
-            hBand.type = "lowshelf";
-            hBand.frequency.value = this.bandSplit[0];
-            hBand.gain.value = this.gainDb;
+            this.filters = this.bandSplit.map(function (frequency) {
+                var filter = context.createBiquadFilter();
+                filter.type = "peaking";
+                filter.frequency.value = frequency;
+                filter.Q.value = 1;
+                filter.gain.value = 0;
 
-            var mBand = context.createBiquadFilter();
-            mBand.frequency.value = this.bandSplit[1];
-            mBand.gain.value = this.gainDb;
+                return filter;
+            }.bind(this));
 
-            var lBand = context.createBiquadFilter();
-            lBand.type = "highshelf";
-            lBand.frequency.value = this.bandSplit[2];
-            lBand.gain.value = this.gainDb;
+            this.sum = context.createGain();
 
-            source.connect(lBand);
-            source.connect(mBand);
-            source.connect(hBand);
+            var lastFilter = this.filters.reduce(function (prevFilter, filter) {
+                prevFilter.connect(filter);
+                return filter;
+            });
 
-            this.lGain = context.createGain();
-            this.mGain = context.createGain();
-            this.hGain = context.createGain();
+            source.connect(this.filters[0]);
 
-            lBand.connect(this.lGain);
-            mBand.connect(this.mGain);
-            hBand.connect(this.hGain);
+            lastFilter.connect(this.sum);
 
-            var sum = context.createGain();
-            this.lGain.connect(sum);
-            this.mGain.connect(sum);
-            this.hGain.connect(sum);
 
-            sum.connect(analyser);
-            sum.connect(context.destination);
+            this.sum.connect(analyser);
+            this.sum.connect(context.destination);
+        },
+
+        mute: function () {
+            this.sum.gain.value = 0;
         }
 
     });

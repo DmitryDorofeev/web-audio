@@ -58,6 +58,8 @@ modules.define('player', ['i-bem__dom'], function (provide, DOM) {
                         this.openFile(event.target.files[0]);
                     });
 
+                    this.equalizer = this.findBlockInside('equalizer');
+
                     this.delMod('loading');
                 }
             }
@@ -82,7 +84,7 @@ modules.define('player', ['i-bem__dom'], function (provide, DOM) {
 
                 this.analyzer = this.context.createAnalyser();
 
-                this.findBlockInside('equalizer').connect(this.context, this.source, this.analyzer);
+                this.equalizer.connect(this.context, this.source, this.analyzer);
 
                 this.findBlockInside('visualization').draw(this.analyzer, 650, 200);
 
@@ -103,12 +105,12 @@ modules.define('player', ['i-bem__dom'], function (provide, DOM) {
 
             if (this.source) {
 
-                this.source.stop(0);
+                this.source.stop(3);
                 this.source = null;
-                this.findBlockInside('visualization').clear();
-
                 this.setMod('stopped');
                 this.delMod('playing');
+
+                this.findBlockInside('visualization').stopDrawing();
             }
         },
 
@@ -201,8 +203,8 @@ modules.define('player', ['i-bem__dom'], function (provide, DOM) {
          */
         updateMetaInfo: function (meta) {
 
-            this.elem('title').text(meta.title);
-            this.elem('artist').text(meta.artist);
+            this.elem('title').text(meta.title || 'Без названия');
+            this.elem('artist').text(meta.artist || '');
             this.elem('cover').prop('src', meta.cover || 'placeholder.jpg');
         },
 

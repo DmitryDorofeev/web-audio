@@ -19,9 +19,10 @@ modules.define('visualization', ['i-bem__dom'], function (provide, DOM) {
             this.domElem[0].width = this.width;
             this.domElem[0].height = this.height;
 
+            this.analyzer.smoothingTimeConstant = 0.7;
             this.analyzer.fftSize = 256;
             this.canvasCtx = this.domElem[0].getContext('2d');
-
+            this.drawing = true;
             this.drawFrame();
         },
 
@@ -32,6 +33,10 @@ modules.define('visualization', ['i-bem__dom'], function (provide, DOM) {
             var barWidth,
                 barHeight,
                 x = 0;
+
+            if (!this.drawing) {
+                return;
+            }
 
             requestAnimationFrame(this.drawFrame.bind(this));
 
@@ -53,11 +58,57 @@ modules.define('visualization', ['i-bem__dom'], function (provide, DOM) {
             }
         },
 
+        attenuation: function () {
+            var barHeight,
+                x = 0;
+
+            if (!this.attenuationData) {
+                this.attenuationData = this.dataArray;
+            }
+
+            this.clear();
+
+            barWidth = (this.width / this.bufferLength) * 2.5;
+
+            this.cleared = true;
+
+            for (var i = 0; i < this.bufferLength; i++) {
+
+                this.attenuationData[i] = this.attenuationData[i] <= 3 ? 0 : this.attenuationData[i] - 3;
+
+                barHeight = this.attenuationData[i];
+
+                if (barHeight !== 0) {
+                    this.cleared = false;
+                }
+
+                this.canvasCtx.fillStyle = 'rgb(' + (barHeight + 40) + ',152,219)';
+                this.canvasCtx.fillRect(x, this.height - barHeight / 2, barWidth, barHeight);
+
+                x += barWidth + 1;
+            }
+
+            if (!this.cleared) {
+                requestAnimationFrame(this.attenuation.bind(this));
+            } else {
+                this.attenuationData = null;
+            }
+
+        },
+
         /**
          * @desc clear canvas
          */
         clear: function () {
             this.canvasCtx.clearRect(0, 0, this.width, this.height);
+        },
+
+        /**
+         * @desc stop drawing
+         */
+        stopDrawing: function () {
+            this.drawing = false;
+            this.attenuation();
         }
     });
 
